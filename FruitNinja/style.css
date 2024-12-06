@@ -1,10 +1,13 @@
 #score,#missed{
-    /* text-align: center; */
-    display: flex;
-    justify-content: center;
-    align-items: center;
     width: 100px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
     height: 30px;
-    background-color: white;
+    color: aliceblue;
+    background-color: black;
     /* position: absolute; */
+}
+.scoreboard{
+    display: flex;
 }

@@ -7,6 +7,20 @@ let arr = [];
 const gravity = 0.2;
 let score=0
 let missed=0
+let toStop=false;
+
+let fruits=[]
+const img = new Image();
+img.src = "fruit-ninja-assets/apple.png";
+fruits.push(img);
+img.src="fruit-ninja-assets/banana.png";
+fruits.push(img);
+img.src="fruit-ninja-assets/orange.png";
+fruits.push(img);
+img.src="fruit-ninja-assets/watermelon.png";
+fruits.push(img);
+console.log(fruits);
+
 // Fill background
 c.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -32,7 +46,8 @@ class Sprite {
         this.velocity.y += gravity;
         if (this.position.y > canvas.height) {
             this.markedForDeletion = true;
-            missed++;
+            
+            if(++missed==3) toStop=true;
             document.getElementById('missed').textContent="Missed: "+missed;
             console.log("Missed:",missed);
         }
@@ -80,10 +95,14 @@ canvas.addEventListener('mousemove', (event) => {
                 mouse.y >= fruit.position.y &&
                 mouse.y <= fruit.position.y + fruit.height && fruit.markedForDeletion==false
             ) {
+                if(fruit.color=='maroon')
+                    toStop=true;
+                else{
                 score++;
                 console.log("Score:", score)
                 document.getElementById('score').textContent="Score: "+score
                 fruit.markedForDeletion = true; // Mark for deletion
+                }
             }
         });
     }
@@ -99,6 +118,7 @@ function animate() {
     c.fillRect(0, 0, canvas.width, canvas.height);
     arr = arr.filter(fruit => !fruit.markedForDeletion); // Remove deleted fruits
     arr.forEach(fruit => fruit.update());
+    if(!toStop)
     requestAnimationFrame(animate); // Continue the loop
 }
 

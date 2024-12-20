@@ -96,7 +96,7 @@ const c = canvas.getContext('2d');
 canvas.width = 1024;
 canvas.height = 576;
 let background = new Image();
-background.src = '../fruit-ninja-assets/background.png';
+background.src = '../assets/background.png';
 let names = ['app', 'ban', 'or', 'wat', 'pin', 'bom'];
 let points = [1, 1, 2, 2, 5, 0];
 let arr = [];
@@ -109,42 +109,42 @@ let active_splashes = [];
 let splash = [];
 let difficulty = 3000;
 const appleSP = new Image();
-appleSP.src = "../fruit-ninja-assets/splash_red_small.png";
+appleSP.src = "../assets/splash_red_small.png";
 splash.push(appleSP);
 const bananaSP = new Image();
-bananaSP.src = "../fruit-ninja-assets/splash_yellow.png";
+bananaSP.src = "../assets/splash_yellow.png";
 splash.push(bananaSP);
 const orangeSP = new Image();
-orangeSP.src = "../fruit-ninja-assets/splash_orange.png";
+orangeSP.src = "../assets/splash_orange.png";
 splash.push(orangeSP);
 const watermelonSP = new Image();
-watermelonSP.src = "../fruit-ninja-assets/splash_red.png";
+watermelonSP.src = "../assets/splash_red.png";
 splash.push(watermelonSP);
 const pineappleSP = new Image();
-pineappleSP.src = "../fruit-ninja-assets/splash_yellow.png";
+pineappleSP.src = "../assets/splash_yellow.png";
 splash.push(pineappleSP);
 const bombSP = new Image();
-bombSP.src = '../fruit-ninja-assets/explosion.png';
+bombSP.src = '../assets/explosion.png';
 splash.push(bombSP);
 
 let fruits = []
 const apple = new Image();
-apple.src = "../fruit-ninja-assets/apple.png";
+apple.src = "../assets/apple.png";
 fruits.push(apple);
 const banana = new Image();
-banana.src = "../fruit-ninja-assets/banana.png";
+banana.src = "../assets/banana.png";
 fruits.push(banana);
 const orange = new Image();
-orange.src = "../fruit-ninja-assets/orange.png";
+orange.src = "../assets/orange.png";
 fruits.push(orange);
 const watermelon = new Image();
-watermelon.src = "../fruit-ninja-assets/watermelon.png";
+watermelon.src = "../assets/watermelon.png";
 fruits.push(watermelon);
 const pineapple = new Image();
-pineapple.src = '../fruit-ninja-assets/pineapple.png';
+pineapple.src = '../assets/pineapple.png';
 fruits.push(pineapple)
 const bomb = new Image();
-bomb.src = '../fruit-ninja-assets/bomb.png';
+bomb.src = '../assets/bomb.png';
 fruits.push(bomb);
 
 function gameOver(score){
@@ -235,7 +235,7 @@ let isDragging = false;
 
 canvas.addEventListener('mousedown', () => {
     isDragging = true;
-    canvas.style.cursor = 'url("../fruit-ninja-assets/knife.png"), auto'
+    canvas.style.cursor = 'url("../assets/knife.png"), auto'
 });
 
 canvas.addEventListener('mousemove', (event) => {

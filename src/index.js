@@ -103,6 +103,9 @@ let arr = [];
 const gravity = 0.2;
 let score = 0
 let missed = 0
+const cutSound = document.getElementById('cutsound');
+const explosionSound = document.getElementById('explosionsound');
+const bombSound=document.getElementById('Bomb-Fuse');
 
 let toStop = 2;
 let active_splashes = [];
@@ -181,8 +184,21 @@ class Sprite {
             this.velocity.y += gravity;
             if (this.position.y > canvas.height) {
                 this.markedForDeletion = true;
-                if (this.NAME != 'bom')
+                if (this.NAME != 'bom'){
                     missed++;
+                }
+                else{
+                    let c=0;
+                    arr.forEach((e)=>{
+                        // console.log(e.N)
+                        if(e.NAME=='bom')
+                            c++
+                    })
+                    if(c==1){
+                    bombSound.pause();
+                    bombSound.currentTime=0;
+                    }
+                }
                 if (missed == 3) {
                     toStop = 0;
                 }
@@ -208,8 +224,10 @@ function createFruits() {
             rand = 0;
         else if (rand <= .5)
             rand = 1;
-        else if (rand <= 0.75)
+        else if (rand <= 0.75){
             rand = 5;
+            bombSound.play();
+        }
         else if (rand <= .8)
             rand = 4;
         else if (rand <= .9)
@@ -251,6 +269,7 @@ canvas.addEventListener('mousemove', (event) => {
                 mouse.y >= fruit.position.y &&
                 mouse.y <= fruit.position.y + fruit.height && fruit.markedForDeletion == false
             ) {
+                
                 let SPLASH = new Sprite({
                     position: { x: fruit.position.x, y: fruit.position.y },
                     velocity: { x: 0, y: 0 },
@@ -261,8 +280,13 @@ canvas.addEventListener('mousemove', (event) => {
                 active_splashes.push(SPLASH);
 
                 if (fruit.NAME == 'bom')
+                {
+                    bombSound.pause();
                     toStop = 1;
+                    explosionSound.play();
+                }
                 else {
+                    cutSound.play();
                     score = score + fruit.point;
                     if (difficulty > 1000)
                         difficulty -= 200;

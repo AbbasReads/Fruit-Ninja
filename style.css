@@ -156,7 +156,15 @@ body {
     flex-direction: column;
     align-items: center;
 }
-
+#embers
+{
+    width: 98vw;
+    height: 300px;
+    position: absolute;
+    object-fit: cover;
+    top: 500px;
+    z-index: -42;
+}
 .scoreboard {
     position: absolute;
     display: flex;

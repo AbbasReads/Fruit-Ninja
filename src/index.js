@@ -1,4 +1,4 @@
-import { getFirestore,collection, query, orderBy, limit, doc, getDoc,  getDocs, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore.js";
+import { getFirestore, collection, query, orderBy, limit, doc, getDoc, getDocs, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 const firebaseConfig = {
@@ -15,35 +15,35 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 
 let currentUser = null;
-
+let currentHighScore = 0;
 async function getLeaderboard() {
     const leaderboard = [];
     try {
-      const q = query(
-        collection(db, "users"),
-        orderBy("high score", "desc"),
-        limit(10) // Adjust the limit to show the top N players
-      );
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        leaderboard.push(doc.data());
-      });
-    //   return leaderboard;
-    console.log(leaderboard)
-    leaderboard.forEach((player)=>{
-        let row=document.createElement('tr')
-        let scorecell=document.createElement('td')
-        let namecell=document.createElement('td')
-        namecell.textContent=player['Username']
-        scorecell.textContent=player['high score']
-        row.append(namecell,scorecell)
-        document.getElementsByTagName('tbody')[0].append(row);
-    })
+        const q = query(
+            collection(db, "users"),
+            orderBy("high score", "desc"),
+            limit(10) // Adjust the limit to show the top N players
+        );
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+            leaderboard.push(doc.data());
+        });
+        //   return leaderboard;
+        console.log(leaderboard)
+        leaderboard.forEach((player) => {
+            let row = document.createElement('tr')
+            let scorecell = document.createElement('td')
+            let namecell = document.createElement('td')
+            namecell.textContent = player['Username']
+            scorecell.textContent = player['high score']
+            row.append(namecell, scorecell)
+            document.getElementsByTagName('tbody')[0].append(row);
+        })
     } catch (e) {
-      console.error("Error retrieving leaderboard: ", e);
+        console.error("Error retrieving leaderboard: ", e);
     }
-  }
-  
+}
+
 
 onAuthStateChanged(auth, async (user) => {
     if (user) {
@@ -57,7 +57,7 @@ onAuthStateChanged(auth, async (user) => {
         try {
             const userDoc = await getDoc(userRef);
 
-            let currentHighScore = 0;
+            
             if (userDoc.exists()) {
                 currentHighScore = userDoc.data()["high score"] || 0;
                 console.log("Current high score:", currentHighScore);
@@ -79,8 +79,7 @@ onAuthStateChanged(auth, async (user) => {
                     console.log('Score is not higher than the current high score. No update made.');
                 }
             }
-
-
+            
             window.saveHighScore = saveHighScore;
         } catch (error) {
             console.error("Error accessing Firestore:", error);
@@ -105,7 +104,7 @@ let score = 0
 let missed = 0
 const cutSound = document.getElementById('cutsound');
 const explosionSound = document.getElementById('explosionsound');
-const bombSound=document.getElementById('Bomb-Fuse');
+const bombSound = document.getElementById('Bomb-Fuse');
 
 let toStop = 2;
 let active_splashes = [];
@@ -150,14 +149,23 @@ const bomb = new Image();
 bomb.src = '../assets/bomb.png';
 fruits.push(bomb);
 
-function gameOver(score){
-    let gameoverscreen=document.getElementsByClassName('gameOver')[0];
-    document.getElementById('score2').innerText=score;
+function gameOver(score) {
+    if (currentHighScore > 25 || score > 25) {
+        document.getElementById('bronze').style.opacity = 1;
+    }
+    if (currentHighScore > 50 || score > 50) {
+        document.getElementById('silver').style.opacity = 1;
+    }
+    if (currentHighScore > 100 || score > 100) {
+        document.getElementById('gold').style.opacity = 1;
+    }
+    let gameoverscreen = document.getElementsByClassName('gameOver')[0];
+    document.getElementById('score2').innerText = score;
     gameoverscreen.classList.remove('hidden')
     window.scrollTo(0, 10);
-    document.getElementById('restart').addEventListener('click',()=>{
+    document.getElementById('restart').addEventListener('click', () => {
         location.reload();
-   })
+    })
 }
 
 c.fillRect(0, 0, canvas.width, canvas.height);
@@ -184,19 +192,19 @@ class Sprite {
             this.velocity.y += gravity;
             if (this.position.y > canvas.height) {
                 this.markedForDeletion = true;
-                if (this.NAME != 'bom'){
+                if (this.NAME != 'bom') {
                     missed++;
                 }
-                else{
-                    let c=0;
-                    arr.forEach((e)=>{
+                else {
+                    let c = 0;
+                    arr.forEach((e) => {
                         // console.log(e.N)
-                        if(e.NAME=='bom')
+                        if (e.NAME == 'bom')
                             c++
                     })
-                    if(c==1){
-                    bombSound.pause();
-                    bombSound.currentTime=0;
+                    if (c == 1) {
+                        bombSound.pause();
+                        bombSound.currentTime = 0;
                     }
                 }
                 if (missed == 3) {
@@ -208,7 +216,14 @@ class Sprite {
         }
     }
 }
-
+function shake() {
+    let amp = 3;
+    var xsh = (Math.random() * amp * 2 - amp); // random position, bias on x
+    var ysh = (Math.random() * amp - amp * 0.5);
+    var tr = "translate(" + xsh + "px," + ysh + "px)";
+    canvas.style.transform = tr;
+    requestAnimationFrame(shake);
+}
 
 function createFruits() {
     let n = Math.floor(Math.random() * 3) + 1;
@@ -224,7 +239,7 @@ function createFruits() {
             rand = 0;
         else if (rand <= .5)
             rand = 1;
-        else if (rand <= 0.75){
+        else if (rand <= 0.75) {
             rand = 5;
             bombSound.play();
         }
@@ -269,7 +284,7 @@ canvas.addEventListener('mousemove', (event) => {
                 mouse.y >= fruit.position.y &&
                 mouse.y <= fruit.position.y + fruit.height && fruit.markedForDeletion == false
             ) {
-                
+
                 let SPLASH = new Sprite({
                     position: { x: fruit.position.x, y: fruit.position.y },
                     velocity: { x: 0, y: 0 },
@@ -279,8 +294,7 @@ canvas.addEventListener('mousemove', (event) => {
 
                 active_splashes.push(SPLASH);
 
-                if (fruit.NAME == 'bom')
-                {
+                if (fruit.NAME == 'bom') {
                     bombSound.pause();
                     toStop = 1;
                     explosionSound.play();
@@ -290,8 +304,11 @@ canvas.addEventListener('mousemove', (event) => {
                     score = score + fruit.point;
                     if (difficulty > 1000)
                         difficulty -= 200;
-                    else if (difficulty > 600)
+                    else if (difficulty > 600) {
                         difficulty -= 40;
+                    }
+                    else
+                        shake();
                     clearInterval(intervalid);
                     intervalid = setInterval(createFruits, difficulty);
 
@@ -334,4 +351,5 @@ function animate() {
 
 
 let intervalid = setInterval(createFruits, difficulty);
+// shake();
 animate();

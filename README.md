@@ -1,2 +1,2 @@
 # Fruit Ninja
-Enter from login.html.
+Enter from index.html.

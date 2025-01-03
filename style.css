@@ -148,7 +148,33 @@ canvas {
 .hidden {
     display: none;
 }
+.fruit{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.fruit>div{
+    /* position: absolute; */
+    /* z-index: -1; */
+    transform: rotate(23deg);
+}
+.scorefruit{
+    width: 100px;
+    position: relative;
+    /* right: 5px; */
+}
+.fruit:nth-child(3){
+    position: relative;
 
+}
+.fruit:nth-child(2)>div{
+    /* color: rgb(85, 0, 0); */
+    font-size: 100px;
+}
+.fruit:nth-child(3)>div{
+    /* color: rgb(85, 0, 0); */
+    font-size: 150px;
+}
 body {
     background-image: url("assets/cuttingboard.jpg");
     background-size: cover;
